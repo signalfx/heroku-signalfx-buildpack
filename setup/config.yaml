@@ -1,14 +1,15 @@
 # *Required* The access token for the org that you wish to send metrics to.
-signalFxAccessToken: {"#from": "/etc/signalfx/token", default: "qpCB9R5aDjSFntYALN8Hgg"}
-ingestUrl: {"#from": "/etc/signalfx/ingest_url", default: "https://ingest.signalfx.com"}
-apiUrl: {"#from": "/etc/signalfx/api_url", default: "https://api.signalfx.com"}
+signalFxAccessToken: {"#from": "env:SFX_TOKEN"}
+
+signalFxRealm: {"#from": "env:SFX_REALM", optional: true}
+ingestUrl: {"#from": "env:SFX_AGENT_INGEST_URL", optional: true}
+apiUrl: {"#from": "env:SFX_AGENT_API_URL", optional: true}
 
 intervalSeconds: 10
 
 logging:
   # Valid values are 'debug', 'info', 'warning', and 'error'
   level: info
-
 
 collectd:
   configDir: tmp/collectd

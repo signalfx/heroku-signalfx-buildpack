@@ -6,7 +6,7 @@ ENV_DIR=$3
 BUILDPACK_DIR=$(cd "$(dirname "$0")"; cd ..; pwd)
 
 # Set a default version of the SignalFx Agent to use if none is specified
-SFX_AGENT_VERSION="4.15.2"
+SFX_AGENT_VERSION="4.17.0"
 
 # Get SignalFx Agent version from the environment if available
 if [ -f "$ENV_DIR/SFX_AGENT_VERSION" ]; then
@@ -22,7 +22,7 @@ mkdir "$BUILD_DIR/.signalfx/etc/signalfx-agent"
 cp "$BUILDPACK_DIR/setup/config.yaml" "$BUILD_DIR/.signalfx/etc/signalfx-agent/"
 
 
-echo "-----> Downloading SignalFx Agent ($signalfx_agent_tar)"
+echo "-----> Downloading SignalFx Agent $SFX_AGENT_VERSION ($signalfx_agent_tar)"
 wget -P "$BUILD_DIR/.signalfx/" "https://github.com/signalfx/signalfx-agent/releases/download/v$SFX_AGENT_VERSION/$signalfx_agent_tar" > /dev/null 2>&1
 
 if [ $? -ne 0 ]; then
