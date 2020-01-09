@@ -1,0 +1,26 @@
+# *Required* The access token for the org that you wish to send metrics to.
+signalFxAccessToken: {"#from": "env:SFX_TOKEN"}
+
+signalFxRealm: {"#from": "env:SFX_REALM", optional: true}
+ingestUrl: {"#from": "env:SFX_AGENT_INGEST_URL", optional: true}
+apiUrl: {"#from": "env:SFX_AGENT_API_URL", optional: true}
+
+globalDimensions:
+  dyno_id: {"#from": "env:HEROKU_DYNO_ID"}
+  app_id: {"#from": "env:HEROKU_APP_ID"}
+
+  # This dimension is also synced by the SignalFx Log Drain Collector. See
+  # https://github.com/signalfx/heroku-signalfx-collector
+  app_name: {"#from": "env:HEROKU_APP_NAME"}
+
+intervalSeconds: 10
+
+logging:
+  # Valid values are 'debug', 'info', 'warning', and 'error'
+  level: info
+
+collectd:
+  configDir: tmp/collectd
+
+monitors:
+  - type: heroku-metadata

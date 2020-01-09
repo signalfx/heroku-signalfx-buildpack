@@ -1,0 +1,40 @@
+#!/bin/sh
+
+BUILD_DIR=$1
+CACHE_DIR=$2
+ENV_DIR=$3
+BUILDPACK_DIR=$(cd "$(dirname "$0")"; cd ..; pwd)
+
+# Set a default version of the SignalFx Agent to use if none is specified
+SFX_AGENT_VERSION="4.18.0"
+
+# Get SignalFx Agent version from the environment if available
+if [ -f "$ENV_DIR/SFX_AGENT_VERSION" ]; then
+  SFX_AGENT_VERSION=$(cat "$ENV_DIR/SFX_AGENT_VERSION")
+fi
+
+signalfx_agent_tar="signalfx-agent-$SFX_AGENT_VERSION.tar.gz"
+mkdir -p "$BUILD_DIR/.signalfx"
+
+SFX_AGENT_CONFIG_DIR="$BUILD_DIR/.signalfx/etc/signalfx-agent"
+mkdir "$BUILD_DIR/.signalfx/etc/"
+mkdir "$BUILD_DIR/.signalfx/etc/signalfx-agent"
+cp "$BUILDPACK_DIR/setup/config.yaml" "$BUILD_DIR/.signalfx/etc/signalfx-agent/"
+
+
+echo "-----> Downloading SignalFx Agent $SFX_AGENT_VERSION ($signalfx_agent_tar)"
+wget -P "$BUILD_DIR/.signalfx/" "https://github.com/signalfx/signalfx-agent/releases/download/v$SFX_AGENT_VERSION/$signalfx_agent_tar" > /dev/null 2>&1
+
+if [ $? -ne 0 ]; then
+    echo "Downloading agent tarball failed" | sed -e 's/^/           /'
+    echo "$SFX_AGENT_VERSION may not be a valid version of the SignalFx Agent. Find valid versions here: https://github.com/signalfx/signalfx-agent/tags" | sed -e 's/^/           /'
+    exit 1;
+fi
+
+echo "-----> Extracting SignalFx Agent"
+tar -xf "$BUILD_DIR/.signalfx/$signalfx_agent_tar" -C "$BUILD_DIR/.signalfx/"
+rm -f "$BUILD_DIR/.signalfx/$signalfx_agent_tar"
+
+mkdir -p "$BUILD_DIR/.profile.d"
+cp "$BUILDPACK_DIR/setup/agent.sh" "$BUILD_DIR/.profile.d/"
+chmod +x "$BUILD_DIR/.profile.d/agent.sh"
