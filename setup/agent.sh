@@ -6,8 +6,6 @@ fi
 
 export SFX_AGENT_CONFIG_DIR="$HOME/.signalfx/etc/signalfx-agent"
 export SFX_AGENT_COLLECTD_CONFIG_DIR="$HOME/.signalfx/signalfx-agent/var/run/collectd"
-export SFX_AGENT_LOG_DIR="$HOME/.signalfx/signalfx-agent/var/log"
-export SFX_AGENT_LOG="$SFX_AGENT_LOG_DIR/agent"
 
 export FALLBACK_AGENT_CONFIG="$SFX_AGENT_CONFIG_DIR/config.yaml"
 export DEFAULT_APP_CONFIG="/app/signalfx/agent.yaml"
@@ -22,8 +20,15 @@ fi
 export SIGNALFX_BUNDLE_DIR="$HOME/.signalfx/signalfx-agent"
 
 mkdir -p "$SFX_AGENT_COLLECTD_CONFIG_DIR"
-mkdir -p "$SFX_AGENT_LOG_DIR"
+
+if [[ -z "$SFX_AGENT_LOG_DIR" ]]; then
+    export SFX_AGENT_LOG_OUTPUT=/dev/stdout
+else
+    mkdir -p "$SFX_AGENT_LOG_DIR"
+    export SFX_AGENT_LOG_OUTPUT="$SFX_AGENT_LOG_DIR/log"
+fi
+
 
 (cd $HOME/.signalfx/signalfx-agent/ && bin/patch-interpreter $HOME/.signalfx/signalfx-agent/)
 
-$HOME/.signalfx/signalfx-agent/bin/signalfx-agent -config $SFX_AGENT_CONFIG &
+$HOME/.signalfx/signalfx-agent/bin/signalfx-agent -config $SFX_AGENT_CONFIG > $SFX_AGENT_LOG_FILE 2>&1&
