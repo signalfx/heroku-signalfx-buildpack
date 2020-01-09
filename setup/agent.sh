@@ -21,11 +21,10 @@ export SIGNALFX_BUNDLE_DIR="$HOME/.signalfx/signalfx-agent"
 
 mkdir -p "$SFX_AGENT_COLLECTD_CONFIG_DIR"
 
-if [[ -z "$SFX_AGENT_LOG_DIR" ]]; then
-    export SFX_AGENT_LOG_OUTPUT=/dev/stdout
+if [[ -z "$SFX_AGENT_LOG_FILE" ]]; then
+    export SFX_AGENT_LOG_FILE=/dev/stdout
 else
-    mkdir -p "$SFX_AGENT_LOG_DIR"
-    export SFX_AGENT_LOG_OUTPUT="$SFX_AGENT_LOG_DIR/log"
+    mkdir -p $(dirname $SFX_AGENT_LOG_FILE)
 fi
 
 

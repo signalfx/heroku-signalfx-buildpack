@@ -9,11 +9,8 @@ Adding and configuring the buildpack
 ```
 # cd into the Heroku project directory
 
-# Add Golang buildpack
-heroku buildpacks:add heroku/go
-
 # Add buildpack for SignalFx Agent
-heroku buildpacks:add https://github.com/signalfx/heroku-signalfx-buildpack.git
+heroku buildpacks:add https://github.com/signalfx/heroku-signalfx-buildpack.git#<BUILDPACK_VERSION>
 
 # Setup SignalFx Access Token
 heroku config:set SFX_TOKEN=<YOUR_SFX_ACCESS_TOKEN>
@@ -26,6 +23,8 @@ git commit --allow-empty -m "empty commit"
 git push heroku master
 ```
 
+**Note**: Specify the version tag of the buildpack when adding it to the project.
+
 ## Configuration
 
 Use the following environment variables to configure this buildpack
@@ -34,7 +33,7 @@ Use the following environment variables to configure this buildpack
 |----------------------|--------------------------------------------------------------------------------------------------|
 | `SFX_TOKEN`          | (**required**) Your SignalFx access token                                                        |
 | `SFX_AGENT_VERSION`  | (**required versions >= 4.18.0**) Version of the SignalFx Agent to be configured                 |
-| `SFX_AGENT_LOG_DIR`  | Specify location of agent logs. If specified, logs will be written to `${SFX_AGENT_LOG_DIR}/log` |
+| `SFX_AGENT_LOG_FILE`  | Specify location of agent logs. If not specified, logs will go to stdout                        |
 
 **Note**: The [Heroku Metadata monitor](https://docs.signalfx.com/en/latest/integrations/agent/monitors/heroku-metadata.html)
 is available starting SignalFx Agent v4.18.0.
@@ -51,11 +50,13 @@ See [here](https://devcenter.heroku.com/articles/dyno-metadata) for more informa
 
 **Overriding the default Agent config**
 
-The default [SignalFx Agent config](./setup/config.yaml) will be overridden
-if a config is provided in `/app/signalfx/agent.yaml`. In such cases, it is
-recommended that the following defaults are retained.
+The default [SignalFx Agent config](./setup/config.yaml) will be overridden if a config is provided in `signalfx/agent.yaml`
+in the root of the Heroku project directory. In such cases, it is recommended that the following defaults are retained.
 
 ```
+# get access token
+signalFxAccessToken: {"#from": "env:SFX_TOKEN"}
+
 # dimensionalizes metadata exposed in dynos
 globalDimensions:
   dyno_id: {"#from": "env:HEROKU_DYNO_ID"}
