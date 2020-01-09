@@ -6,7 +6,7 @@ ENV_DIR=$3
 BUILDPACK_DIR=$(cd "$(dirname "$0")"; cd ..; pwd)
 
 # Set a default version of the SignalFx Agent to use if none is specified
-SFX_AGENT_VERSION="4.17.0"
+SFX_AGENT_VERSION="4.18.0"
 
 # Get SignalFx Agent version from the environment if available
 if [ -f "$ENV_DIR/SFX_AGENT_VERSION" ]; then
