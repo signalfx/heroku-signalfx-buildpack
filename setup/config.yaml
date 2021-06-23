@@ -4,6 +4,7 @@ signalFxAccessToken: {"#from": "env:SFX_TOKEN"}
 signalFxRealm: {"#from": "env:SFX_REALM", optional: true}
 ingestUrl: {"#from": "env:SFX_AGENT_INGEST_URL", optional: true}
 apiUrl: {"#from": "env:SFX_AGENT_API_URL", optional: true}
+traceEndpointUrl: {"#from": "env:SFX_AGENT_TRACE_URL", optional: true}
 
 globalDimensions:
   dyno_id: {"#from": "env:HEROKU_DYNO_ID"}
@@ -24,3 +25,18 @@ collectd:
 
 monitors:
   - type: heroku-metadata
+  - type: signalfx-forwarder
+    listenAddress: 0.0.0.0:9080
+    # Optional
+    # Used to add a tag to spans
+    #defaultSpanTags:
+     # Set the environment filter to monitor each environment separately.
+     # The environment span tag also enables host correlation with
+     # default Infrastructure Monitoring dashboards.
+     #deployment.environment: "${SFX_ENVIRONMENT}"
+    # Used to add and override a tag on a span
+    #extraSpanTags:
+     #SPAN_TAG_KEY: "SPAN_TAG_VALUE"
+
+writer:
+  traceExportFormat: sapm
