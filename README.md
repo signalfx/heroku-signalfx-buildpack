@@ -59,4 +59,5 @@ See [here](https://devcenter.heroku.com/articles/dyno-metadata) for more informa
 ### Overriding the default Agent config
 
 The default [SignalFx Agent config](./setup/config.yaml) will be overridden if a config is provided in `signalfx/agent.yaml`
-in the root of the Heroku project directory.
+in the root of the Heroku project directory. In such cases, it is recommended
+that the [default configuration options](setup/config.yaml) are retained.
