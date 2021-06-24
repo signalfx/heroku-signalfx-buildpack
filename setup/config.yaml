@@ -18,7 +18,7 @@ intervalSeconds: 10
 
 logging:
   # Valid values are 'debug', 'info', 'warning', and 'error'
-  level: info
+  level: debug
 
 collectd:
   configDir: tmp/collectd
