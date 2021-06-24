@@ -6,37 +6,55 @@ ingestUrl: {"#from": "env:SFX_AGENT_INGEST_URL", optional: true}
 apiUrl: {"#from": "env:SFX_AGENT_API_URL", optional: true}
 traceEndpointUrl: {"#from": "env:SFX_AGENT_TRACE_URL", optional: true}
 
-globalDimensions:
-  dyno_id: {"#from": "env:HEROKU_DYNO_ID"}
-  app_id: {"#from": "env:HEROKU_APP_ID"}
+# globalDimensions:
+#   dyno_id: {"#from": "env:HEROKU_DYNO_ID"}
+#   app_id: {"#from": "env:HEROKU_APP_ID"}
+#
+#   # This dimension is also synced by the SignalFx Log Drain Collector. See
+#   # https://github.com/signalfx/heroku-signalfx-collector
+#   app_name: {"#from": "env:HEROKU_APP_NAME"}
+#
+# intervalSeconds: 10
+#
+# logging:
+#   # Valid values are 'debug', 'info', 'warning', and 'error'
+#   level: debug
+#
+# collectd:
+#   configDir: tmp/collectd
+#
+# monitors:
+#   - type: heroku-metadata
+#   - type: signalfx-forwarder
+#     # Optional
+#     # Used to add a tag to spans
+#     #defaultSpanTags:
+#      # Set the environment filter to monitor each environment separately.
+#      # The environment span tag also enables host correlation with
+#      # default Infrastructure Monitoring dashboards.
+#      #deployment.environment: "${SFX_ENVIRONMENT}"
+#     # Used to add and override a tag on a span
+#     #extraSpanTags:
+#      #SPAN_TAG_KEY: "SPAN_TAG_VALUE"
+#
+# writer:
+#   traceExportFormat: sapm
+#   logTraceSpans: true
 
-  # This dimension is also synced by the SignalFx Log Drain Collector. See
-  # https://github.com/signalfx/heroku-signalfx-collector
-  app_name: {"#from": "env:HEROKU_APP_NAME"}
 
-intervalSeconds: 10
+intervalSeconds: {"#from": "env:INTERVAL_SECONDS", default: 10}
 
 logging:
-  # Valid values are 'debug', 'info', 'warning', and 'error'
-  level: debug
+  level: {"#from": "env:LOG_LEVEL", default: "debug"}
 
-collectd:
-  configDir: tmp/collectd
+etcPath: /hostfs/etc
+procPath: /hostfs/proc
+runPath: /hostfs/run
+varPath: /hostfs/var
+sysPath: /hostfs/sys
 
 monitors:
-  - type: heroku-metadata
   - type: signalfx-forwarder
-    listenAddress: 0.0.0.0:9080
-    # Optional
-    # Used to add a tag to spans
-    #defaultSpanTags:
-     # Set the environment filter to monitor each environment separately.
-     # The environment span tag also enables host correlation with
-     # default Infrastructure Monitoring dashboards.
-     #deployment.environment: "${SFX_ENVIRONMENT}"
-    # Used to add and override a tag on a span
-    #extraSpanTags:
-     #SPAN_TAG_KEY: "SPAN_TAG_VALUE"
 
 writer:
   traceExportFormat: sapm
