@@ -40,3 +40,4 @@ monitors:
 
 writer:
   traceExportFormat: sapm
+  logTraceSpans: true
