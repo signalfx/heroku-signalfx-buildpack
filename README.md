@@ -5,6 +5,8 @@ A Heroku buildpack to install and run the SignalFx Smart Agent on a Dyno.
 **Note**: The [Heroku Metadata monitor](https://docs.signalfx.com/en/latest/integrations/agent/monitors/heroku-metadata.html)
 is available starting SignalFx Agent v4.18.0.
 
+:warning: **SignalFx Smart Agent is deprecated. For details, see the [Deprecation Notice](https://github.com/signalfx/signalfx-agent/docs/smartagent-deprecation-notice.md)** :warning:
+
 ## Installation
 
 Adding and configuring the buildpack
